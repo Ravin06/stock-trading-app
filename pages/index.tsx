@@ -1,19 +1,24 @@
+/*
+    Student Name : Ravin Nagpal
+    Student Number: S10265740K
+*/
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 
 const LoginPage = () => {
   const [darkMode, setDarkMode] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter();
 
   // Handle form submission
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = (e) => {
     e.preventDefault();
 
-    // Simple check for login (you can add more logic)
+    // pretend to login, in this case, credentials are hardcoded, in future, will be using login with google
     if (email === 'user@example.com' && password === 'password') {
-      setIsLoggedIn(true);
+      router.push('/S10269605'); // Update: Redirect to /S10269605 after login
     } else {
       alert('Invalid credentials');
     }
@@ -60,7 +65,7 @@ const LoginPage = () => {
 
   const buttonStyle = {
     backgroundColor: darkMode ? '#2a2f37' : '#007BFF',
-    color: darkMode ? '#ffffff' : '#ffffff',
+    color: '#ffffff',
     padding: '18px',
     border: 'none',
     cursor: 'pointer',
@@ -90,11 +95,9 @@ const LoginPage = () => {
   };
 
   useEffect(() => {
-    // Load particles.js script
     const script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/npm/particles.js';
     script.onload = () => {
-      // Initialize particles.js after loading the script
       if (typeof window !== 'undefined') {
         window.particlesJS('particles-js', {
           particles: {
@@ -114,17 +117,6 @@ const LoginPage = () => {
     };
     document.head.appendChild(script);
   }, []);
-
-  if (isLoggedIn) {
-    return (
-      <div style={pageStyle}>
-        <h1>Welcome to the Stock Trading Platform!</h1>
-        <button onClick={() => setIsLoggedIn(false)} style={buttonStyle}>
-          Logout
-        </button>
-      </div>
-    );
-  }
 
   return (
     <div style={pageStyle}>
