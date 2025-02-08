@@ -12,6 +12,7 @@
     "@heroicons/react": "^2.2.0",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.7",
+    "finnhub": "^1.2.19",
     "heroicons": "^2.2.0",
     "js-cookie": "^3.0.5",
     "next": "^15.1.6",
