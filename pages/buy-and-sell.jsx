@@ -18,10 +18,10 @@ const StockTradingPage = () => {
   const [alerts, setAlerts] = useState([]);
   const [darkMode, setDarkMode] = useState(true); // Default is dark mode
   const [currentPrice, setCurrentPrice] = useState(0);
-  const [graphData, setGraphData] = useState([]);  // Holds the graph data for Bitcoin
-  const [bitcoinAmount, setBitcoinAmount] = useState(0); // Track the amount of Bitcoin owned
+  const [graphData, setGraphData] = useState([]);  // Holds the graph data for BTC
+  const [bitcoinAmount, setBitcoinAmount] = useState(0); // Track the amount of BTC owned
 
-  // Fetch Bitcoin data and update graph
+  // Fetch BTC data and update graph
   const fetchBitcoinData = async () => {
     try {
       const res = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1');
@@ -36,11 +36,11 @@ const StockTradingPage = () => {
       setGraphData(formattedData);
       setCurrentPrice(formattedData[formattedData.length - 1].price);
     } catch (error) {
-      console.error('Error fetching Bitcoin data:', error);
+      console.error('Error fetching BTC data:', error);
     }
   };
 
-  // Run this on component mount to fetch the Bitcoin data
+  // Run this on component mount to fetch the BTC data
   useEffect(() => {
     fetchBitcoinData();
     const interval = setInterval(fetchBitcoinData, 60000); // Update the price every minute
@@ -58,8 +58,8 @@ const StockTradingPage = () => {
   // Calculate the highest and lowest values from the graph data
   const getMaxMinPrice = () => {
     const prices = graphData.map((data) => data.price);
-    const maxPrice = Math.max(...prices);
-    const minPrice = Math.min(...prices);
+    const maxPrice = Math.round((Math.max(...prices) + (Math.max(...prices) / 500)) / 100) * 100;
+    const minPrice = Math.round((Math.min(...prices) - (Math.min(...prices) / 500)) / 100) * 100;
     return { maxPrice, minPrice };
   };
 
@@ -67,7 +67,7 @@ const StockTradingPage = () => {
 
   const handleTrade = () => {
   if (action === 'sell' && quantity > bitcoinAmount) {
-    alert('You do not have enough Bitcoin to sell.');
+    alert('You do not have enough BTC to sell.');
     return;
   }
 
@@ -80,21 +80,21 @@ const StockTradingPage = () => {
     timestamp: new Date().toLocaleString(),
   };
 
-  // Update Bitcoin amount based on action (buy or sell)
+  // Update BTC amount based on action (buy or sell)
   if (action === 'buy') {
-    const newAmount = parseFloat((bitcoinAmount + quantity).toFixed(6)); // Add Bitcoin to holdings
+    const newAmount = parseFloat((bitcoinAmount + quantity).toFixed(6)); // Add BTC to holdings
     setBitcoinAmount(newAmount);
-    Cookies.set('bitcoinAmount', newAmount);  // Save the new Bitcoin amount in the cookie
+    Cookies.set('bitcoinAmount', newAmount);  // Save the new BTC amount in the cookie
   } else if (action === 'sell') {
-    const newAmount = parseFloat((bitcoinAmount - quantity).toFixed(6)); // Subtract Bitcoin from holdings
+    const newAmount = parseFloat((bitcoinAmount - quantity).toFixed(6)); // Subtract BTC from holdings
     setBitcoinAmount(newAmount);
-    Cookies.set('bitcoinAmount', newAmount);  // Save the new Bitcoin amount in the cookie
+    Cookies.set('bitcoinAmount', newAmount);  // Save the new BTC amount in the cookie
   }
 
   setTransactions([transaction, ...transactions]);
 
   // Create the alert message
-  const newAlert = `${action === 'buy' ? 'Bought' : 'Sold'} ${quantity} Bitcoin for $${totalValue.toFixed(2)}`;
+  const newAlert = `${action === 'buy' ? 'Bought' : 'Sold'} ${quantity} BTC for $${totalValue.toFixed(2)}`;
   setAlerts([newAlert, ...alerts]); // Add alert to the list
 
   setQuantity(1);
@@ -109,7 +109,7 @@ const StockTradingPage = () => {
     setDarkMode(!darkMode);
   };
 
-  // Calculate the value of Bitcoin holdings
+  // Calculate the value of BTC holdings
   const bitcoinValue = bitcoinAmount * currentPrice;
 
   return (
@@ -135,7 +135,7 @@ const StockTradingPage = () => {
           justifyContent: 'center',
         }}
       >
-        <h2 style={{ marginBottom: '10px', textAlign: 'center', fontSize: '30px' }}>Bitcoin Price</h2>
+        <h2 style={{ marginBottom: '10px', textAlign: 'center', fontSize: '30px' }}>BTC Rates</h2>
         <div style={{ marginTop: '20px' }}>
           <ResponsiveContainer width="95%" height={350}>
             <LineChart data={graphData}>
@@ -184,7 +184,7 @@ const StockTradingPage = () => {
           justifyContent: 'center',
         }}
       >
-        <h2>{action === 'buy' ? 'Buy Bitcoin' : 'Sell Bitcoin'}</h2>
+        <h2>{action === 'buy' ? 'Buy BTC' : 'Sell BTC'}</h2>
         <input
           type="number"
           min="1"
@@ -252,7 +252,7 @@ const StockTradingPage = () => {
 </div>
 
 
-        {/* Bitcoin Amount */}
+        {/* BTC Amount */}
         <div
           style={{
             marginTop: '20px',
@@ -265,8 +265,8 @@ const StockTradingPage = () => {
             textAlign: 'center',
           }}
         >
-          <h3>Bitcoin Amount: {bitcoinAmount.toFixed(6)} BTC</h3>
-          <h3>Bitcoin Value: ${bitcoinValue.toFixed(2)}</h3>
+          <h3>BTC Amount: {bitcoinAmount.toFixed(6)} BTC</h3>
+          <h3>BTC Value: ${bitcoinValue.toFixed(2)}</h3>
         </div>
       </div>
     </div>
