@@ -25,6 +25,17 @@ const Portfolio = () => {
                 label: "Account Balance",
                 data: timeRangeData[timeRange].data,
                 borderColor: "#4CAF50",
+                backgroundColor: (context) => {
+                    const chart = context.chart;
+                    const { ctx, chartArea } = chart;
+                    if (!chartArea) {
+                        return null;
+                    }
+                    const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                    gradient.addColorStop(0, "rgba(76, 175, 80, 0.5)");
+                    gradient.addColorStop(1, "rgba(76, 175, 80, 0)");
+                    return gradient;
+                },
                 fill: true,
             },
         ],
