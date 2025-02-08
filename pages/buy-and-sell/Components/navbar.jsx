@@ -1,11 +1,11 @@
 /*
-    Student Name : Tan Jun Rui Javen
-    Student Number: S10269605H
+    Student Name : Wynston Wong Jun De
+    Student Number: S10266219F
 */
 
 //import dependencies
 import React from "react";
-import "../S10269605H.css"; // Import centralized CSS
+import "../S10266219F.css"; // Import centralized CSS
 
 
 // Navbar component for navigation
@@ -13,7 +13,7 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             {/* app Title */}
-            <div className="navbar-title">Stock Exchange App</div>
+            <div className="navbar-title">Buy & Sell Stocks</div>
 
             {/* navigation links */}
             <ul className="navbar-links">

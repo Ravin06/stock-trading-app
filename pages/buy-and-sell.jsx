@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+import { LineChart, Line, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import Cookies from 'js-cookie';  // Import the js-cookie library
+import Navbar from './buy-and-sell/Components/navbar.jsx'; // Import the Navbar component
 
 const StockTradingPage = () => {
   const [quantity, setQuantity] = useState(1);
@@ -57,39 +59,43 @@ const StockTradingPage = () => {
   const { maxPrice, minPrice } = getMaxMinPrice();
 
   const handleTrade = () => {
-    if (action === 'sell' && quantity > bitcoinAmount) {
-      alert('You do not have enough Bitcoin to sell.');
-      return;
-    }
+  if (action === 'sell' && quantity > bitcoinAmount) {
+    alert('You do not have enough Bitcoin to sell.');
+    return;
+  }
 
-    const totalValue = currentPrice * quantity;
-    const transaction = {
-      id: transactions.length + 1,
-      quantity,
-      action,
-      totalValue,
-      timestamp: new Date().toLocaleString(),
-    };
-
-    // Update Bitcoin amount based on action (buy or sell)
-    if (action === 'buy') {
-      const newAmount = parseFloat((bitcoinAmount + quantity).toFixed(6)); // Add Bitcoin to holdings
-      setBitcoinAmount(newAmount);
-      Cookies.set('bitcoinAmount', newAmount);  // Save the new Bitcoin amount in the cookie
-    } else if (action === 'sell') {
-      const newAmount = parseFloat((bitcoinAmount - quantity).toFixed(6)); // Subtract Bitcoin from holdings
-      setBitcoinAmount(newAmount);
-      Cookies.set('bitcoinAmount', newAmount);  // Save the new Bitcoin amount in the cookie
-    }
-
-    setTransactions([transaction, ...transactions]);
-
-    // Create the alert message
-    const newAlert = `${action === 'buy' ? 'Bought' : 'Sold'} ${quantity} Bitcoin for $${totalValue.toFixed(2)}`;
-    setAlerts([newAlert, ...alerts]); // Add alert to the list
-
-    setQuantity(1);
+  const totalValue = currentPrice * quantity;
+  const transaction = {
+    id: transactions.length + 1,
+    quantity,
+    action,
+    totalValue,
+    timestamp: new Date().toLocaleString(),
   };
+
+  // Update Bitcoin amount based on action (buy or sell)
+  if (action === 'buy') {
+    const newAmount = parseFloat((bitcoinAmount + quantity).toFixed(6)); // Add Bitcoin to holdings
+    setBitcoinAmount(newAmount);
+    Cookies.set('bitcoinAmount', newAmount);  // Save the new Bitcoin amount in the cookie
+  } else if (action === 'sell') {
+    const newAmount = parseFloat((bitcoinAmount - quantity).toFixed(6)); // Subtract Bitcoin from holdings
+    setBitcoinAmount(newAmount);
+    Cookies.set('bitcoinAmount', newAmount);  // Save the new Bitcoin amount in the cookie
+  }
+
+  setTransactions([transaction, ...transactions]);
+
+  // Create the alert message
+  const newAlert = `${action === 'buy' ? 'Bought' : 'Sold'} ${quantity} Bitcoin for $${totalValue.toFixed(2)}`;
+  setAlerts([newAlert, ...alerts]); // Add alert to the list
+
+  setQuantity(1);
+
+  // Refresh the graph by fetching the updated data
+  fetchBitcoinData();  // Refresh graph data after the trade
+};
+
 
   // Toggle between dark and light modes
   const toggleDarkMode = () => {
@@ -109,25 +115,10 @@ const StockTradingPage = () => {
         fontFamily: 'Roboto, sans-serif',
       }}
     >
-      {/* Dark/Light Mode Toggle Button */}
-      <button
-        onClick={toggleDarkMode}
-        style={{
-          position: 'absolute',
-          top: '20px',
-          right: '20px',
-          backgroundColor: darkMode ? '#333333' : '#ffffff',
-          color: darkMode ? '#333333' : '#ffffff',
-          padding: '10px 15px',
-          border: 'none',
-          borderRadius: '5px',
-          cursor: 'pointer',
-        }}
-      >
-        {darkMode ? '🌙' : '🌞'}
-      </button>
+      {/* Navbar component here */}
+      <Navbar />
 
-      {/* Graph Section */}
+      {/* Your existing content */}
       <div
         style={{
           flex: 2,
@@ -141,6 +132,12 @@ const StockTradingPage = () => {
         <div style={{ marginTop: '20px' }}>
           <ResponsiveContainer width="95%" height={350}>
             <LineChart data={graphData}>
+              <defs>
+                <linearGradient id="gradientColor" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#dc3545" stopOpacity={0.4} />
+                  <stop offset="100%" stopColor={darkMode ? '#121212' : '#ffffff'} stopOpacity={0.1} />
+                </linearGradient>
+              </defs>
               <CartesianGrid stroke={darkMode ? '#444444' : '#e0e0e0'} strokeDasharray="5 5" />
               <XAxis dataKey="time" stroke={darkMode ? '#ffffff' : '#000000'} />
               <YAxis
@@ -149,7 +146,21 @@ const StockTradingPage = () => {
                 domain={[minPrice, maxPrice]}  // Set Y-axis domain to show values between min and max prices
               />
               <Tooltip />
-              <Line type="monotone" dataKey="price" stroke="#82ca9d" strokeWidth={2} dot={true} />
+              {/* The red line */}
+              <Line
+                type="monotone"
+                dataKey="price"
+                stroke="#dc3545" // Red line
+                strokeWidth={2}
+                dot={true}
+              />
+              {/* Area with gradient below the line */}
+              <Area
+                type="monotone"
+                dataKey="price"
+                stroke="none" // No stroke on the area
+                fill="url(#gradientColor)" // Gradient under the line
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -176,10 +187,10 @@ const StockTradingPage = () => {
             marginBottom: '15px',
             padding: '10px',
             borderRadius: '5px',
-            border: '1px solid #ccc',
+            border: '1px solid red', // Red border
             width: '80%',
-            color: '#000',
-            backgroundColor: darkMode ? '#fff' : '#fff',
+            color: '#ffffff', // White text
+            backgroundColor: '#000000', // Black background
           }}
         />
         <select
@@ -189,7 +200,10 @@ const StockTradingPage = () => {
             marginBottom: '15px',
             padding: '10px',
             borderRadius: '5px',
+            border: '1px solid red', // Red border
             width: '80%',
+            color: '#ffffff', // White text
+            backgroundColor: '#000000', // Black background
           }}
         >
           <option value="buy">Buy</option>
@@ -198,10 +212,10 @@ const StockTradingPage = () => {
         <button
           onClick={handleTrade}
           style={{
-            backgroundColor: action === 'buy' ? '#28a745' : '#dc3545',
+            backgroundColor: action === 'buy' ? '#dc3545' : '#dc3545',  // Changed to red
             color: '#ffffff',
             padding: '10px',
-            border: 'none',
+            border: '1px solid red', // Red border
             borderRadius: '5px',
             width: '80%',
           }}
@@ -210,33 +224,36 @@ const StockTradingPage = () => {
         </button>
 
         {/* Alerts Section */}
-        <div
-          style={{
-            marginTop: '20px',
-            padding: '10px',
-            backgroundColor: '#f8d7da',
-            color: '#721c24',
-            borderRadius: '5px',
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          {alerts.map((alert, index) => (
-            <div key={index} style={{ marginBottom: '10px' }}>
-              <strong>{alert}</strong>
-            </div>
-          ))}
-        </div>
+<div
+  style={{
+    marginTop: '20px',
+    padding: '10px',
+    backgroundColor: '#000000',  // Black background
+    color: '#ffffff',  // White text
+    borderRadius: '5px',
+    border: '1px solid red', // Red border
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  }}
+>
+  {alerts.map((alert, index) => (
+    <div key={index} style={{ marginBottom: '10px' }}>
+      <strong>{alert}</strong>
+    </div>
+  ))}
+</div>
+
 
         {/* Bitcoin Amount */}
         <div
           style={{
             marginTop: '20px',
             padding: '10px',
-            backgroundColor: '#e0f7fa',
-            color: '#00796b',
+            backgroundColor: '#000000',  // Black background
+            color: '#ffffff',  // White text
             borderRadius: '5px',
+            border: '1px solid red', // Red border
             width: '100%',
             textAlign: 'center',
           }}
