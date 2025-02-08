@@ -76,7 +76,13 @@ const Chart = () => {
                         {/* settings for the x and y axis */}
                         <XAxis dataKey="date" /> {/* shows date on the x axis */}
                         <YAxis domain={["auto", "auto"]} /> {/* automatically scale the y axis*/}
-                        <Tooltip /> {/* shows data when hovering cursor over points.*/}
+                        <Tooltip
+                            contentStyle={{
+                                backgroundColor: "white", // Dark background
+                                color: "maroon", // White text for visibility
+                                border: "1px solid gray",
+                            }}
+                        /> {/* shows data when hovering cursor over points.*/}
                     </AreaChart>
                 </ResponsiveContainer>
             </div>
