@@ -1,0 +1,380 @@
+/* Global Styles */
+body {
+    background: linear-gradient(to bottom, black, maroon);
+    margin: 0;
+    padding-top: 60px;
+    font-family: 'Quicksand', sans-serif;
+    color: white;
+}
+
+/* header container */
+.header-container {
+    padding: 0 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+/* company name */
+.company-title {
+    font-size: 26px;
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 5px;
+    color: white;
+}
+
+/* search bar */
+.search-container {
+    display: flex;
+    align-items: center;
+    border: 2px solid maroon;
+    border-radius: 6px;
+    width: 24rem;
+    background-color: black;
+    padding: 4px;
+    position: relative;
+}
+
+/* search input */
+.search-input {
+    width: 100%;
+    padding: 8px 10px;
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    font-size: 14px;
+    color: white;
+    background-color: transparent;
+}
+
+/* dashboard layout */
+.dashboard {
+    display: grid;
+    grid-template-columns: 7fr 3fr;
+    grid-template-rows: auto 1fr;
+    gap: 16px;
+    padding: 20px;
+    max-width: 95vw;
+    margin: auto;
+    height: 90vh;
+}
+
+/* full-width header */
+.header {
+    grid-column: span 2;
+    width: 100%;
+}
+
+/* chart box */
+.chart {
+    grid-column: 1;
+    grid-row: 2;
+    height: 550px;
+    width: 100%;
+    background-color: black;
+    border: 2px solid maroon;
+}
+
+/* right section */
+.right-section {
+    display: flex;
+    flex-direction: column;
+    height: 550px;
+    width: 100%;
+    gap: 20px;
+}
+
+/* overview box */
+.overview {
+    flex-grow: 1;
+    width: 100%;
+    height: 30%;
+}
+
+/* details box */
+.details {
+    flex-grow: 2;
+    width: 100%;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* card styling */
+.card {
+    background-color: #121212;
+    border-radius: 12px;
+    border: 2px solid maroon;
+    padding: 16px;
+    box-shadow: 0px 2px 5px rgba(255, 255, 255, 0.1);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+/* navbar */
+.navbar {
+    width: 100%;
+    height: 60px;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+/* navbar title */
+.navbar-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+/* navbar links */
+.navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-links li {
+    display: inline;
+}
+
+.navbar-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+/* hover effect */
+.navbar-links a:hover {
+    color: #ffcccb;
+}
+
+/* logout button */
+.logout {
+    font-weight: bold;
+    color: #ffcccb;
+}
+
+/* details section */
+.details-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.details-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-bottom: 1px solid maroon;
+}
+
+.details-label {
+    font-weight: bold;
+    color: maroon;
+}
+
+.details-value {
+    font-size: 14px;
+    color: white;
+}
+
+/* search results */
+.search-results-container {
+    position: absolute;
+    top: 50px; 
+    left: 0;
+    width: 100%;
+    max-width: 400px;
+    border: 2px solid maroon;
+    border-radius: 6px;
+    background-color: black;
+    z-index: 100;
+    padding: 4px;
+    max-height: 300px;
+    overflow-y: auto;
+    scrollbar-width: thin; 
+    scrollbar-color: maroon black;
+}
+
+/* Custom Scrollbar for WebKit Browsers (Chrome, Edge, Safari) */
+.search-results-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.search-results-container::-webkit-scrollbar-track {
+    background: black;
+}
+
+.search-results-container::-webkit-scrollbar-thumb {
+    background: maroon;
+    border-radius: 4px
+}
+
+.search-results-container::-webkit-scrollbar-thumb:hover {
+    background: darkred;
+}
+
+/* search result items */
+.search-result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    border-bottom: 1px solid maroon;
+    cursor: pointer;
+    font-size: 16px;
+    color: white;
+}
+
+/* hover effect */
+.search-result-item:hover {
+    background-color: maroon;
+    color: white;
+}
+
+/* fix search icons */
+.search-icon {
+    width: 20px;
+    height: 20px;
+    color: maroon;
+    position: absolute;
+    left: 10px;
+}
+
+.clear-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    right: 50px;
+}
+
+.clear-icon {
+    width: 20px;
+    height: 20px;
+    color: maroon;
+}
+
+.search-button {
+    width: 32px;
+    height: 32px;
+    background-color: maroon;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    padding: 4px;
+}
+
+.search-button-icon {
+    width: 16px;
+    height: 16px;
+    color: white;
+}
+
+/* overview card */
+.overview-symbol {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    color: white;
+    font-size: 18px;
+}
+
+.overview-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.overview-price {
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+}
+
+.overview-currency {
+    font-size: 24px;
+    color: maroon;
+    margin-left: 5px;
+}
+
+.overview-change {
+    font-size: 24px;
+}
+
+.positive {
+    color: #32CD32; 
+}
+
+.negative {
+    color: #FF4500;
+}
+
+/* chart container */
+.chart-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    overflow: hidden; 
+}
+
+/* chart filters */
+.chart-filter-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 10px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    z-index: 100;
+}
+
+.chart-filter-button {
+    width: 50px;
+    height: 30px;
+    border: 1px solid maroon;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: black;
+    color: white;
+    font-weight: bold;
+    transition: background 0.3s ease-in-out;
+}
+
+.chart-filter-button.active {
+    background-color: maroon;
+    color: white;
+    border-color: darkred;
+}
