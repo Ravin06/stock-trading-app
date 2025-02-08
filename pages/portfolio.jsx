@@ -90,6 +90,17 @@ const Portfolio = () => {
         ],
     };
 
+    // Static cash balance (USD + SGD + HKD)
+    const cashBalance = 5000 + 3000 + 2000;
+
+    // Calculate total stock value dynamically
+    const totalStockValue = stocks.reduce((acc, stock) => {
+        return acc + stock.quantity * (stock.marketPrice || stock.avgPrice);
+    }, 0);
+
+    // Compute dynamic account balance
+    const accountBalance = cashBalance + totalStockValue;
+
     return (
         <div className="p-6 bg-[#1e1e1e] min-h-screen flex">
             <Navbar />
@@ -98,7 +109,7 @@ const Portfolio = () => {
                 <h2 className="text-xl font-semibold mb-4 text-gray-300">Account Info</h2>
                 <div className="border-b border-[#3a3a3a] pb-4 mb-4">
                     <h3 className="text-lg font-semibold text-gray-400">Total Account Value</h3>
-                    <p className="text-3xl font-bold text-white">$25,000</p>
+                    <p className="text-3xl font-bold text-white">${accountBalance.toFixed(2)}</p>
                 </div>
                 <div>
                     <h3 className="text-lg font-semibold text-gray-400">Cash Available</h3>
