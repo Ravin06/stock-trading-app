@@ -1,3 +1,10 @@
+/*
+    Student Name : Wynston Wong Jun De
+    Student Number: S10266219F
+*/
+
+
+
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
