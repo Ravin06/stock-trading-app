@@ -1,13 +1,51 @@
-import React, { useState } from "react";
+/*
+Student Name: Cedrick Tan Yi Quan
+Student Number: S10265863D
+*/
+
+import React, { useState, useEffect } from "react";
 import { Line, Doughnut } from "react-chartjs-2";
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement, Filler } from "chart.js";
+import Navbar from "./portfolio/Components/navbar.jsx";
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement, Filler);
 
 const Portfolio = () => {
     const [timeRange, setTimeRange] = useState("6M");
 
-    // Sample data for different time ranges
+    // Static stock data (except for marketPrice)
+    const initialStocks = [
+        { symbol: "AAPL", quantity: 10, avgPrice: 145 },
+        { symbol: "TSLA", quantity: 5, avgPrice: 300 },
+        { symbol: "AMZN", quantity: 3, avgPrice: 200 },
+    ];
+
+    const [stocks, setStocks] = useState(initialStocks.map(stock => ({ ...stock, marketPrice: null })));
+
+    // Fetch market prices from Finnhub API
+    useEffect(() => {
+        const fetchMarketPrices = async () => {
+            try {
+                const updatedStocks = await Promise.all(
+                    initialStocks.map(async (stock) => {
+                        const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${stock.symbol}&token=cujqgbpr01qgs4826d3gcujqgbpr01qgs4826d40`);
+                        const data = await response.json();
+                        return {
+                            ...stock,
+                            marketPrice: data.c || stock.avgPrice, // 'c' is the current price in Finnhub's response
+                        };
+                    })
+                );
+                setStocks(updatedStocks);
+            } catch (error) {
+                console.error("Error fetching market prices:", error);
+            }
+        };
+
+        fetchMarketPrices();
+    }, []);
+
+    // Sample data for different time ranges (for account balance over time)
     const timeRangeData = {
         "5D": { labels: ["Mon", "Tue", "Wed", "Thu", "Fri"], data: [20000, 21200, 22500, 23300, 24000] },
         "1M": { labels: ["Week 1", "Week 2", "Week 3", "Week 4"], data: [24000, 24300, 24700, 25000] },
@@ -54,6 +92,8 @@ const Portfolio = () => {
 
     return (
         <div className="p-6 bg-[#1e1e1e] min-h-screen flex">
+            <Navbar />
+            {/* Left Side Panel (Account Info & Cash Balance) */}
             <div className="w-1/4 bg-[#232323] p-6 rounded-xl shadow-md mr-6 border border-[#3a3a3a] flex flex-col">
                 <h2 className="text-xl font-semibold mb-4 text-gray-300">Account Info</h2>
                 <div className="border-b border-[#3a3a3a] pb-4 mb-4">
@@ -72,11 +112,13 @@ const Portfolio = () => {
             </div>
 
             <div className="flex-1 flex flex-col">
+                {/* Main Chart */}
                 <div className="w-full bg-[#2a2a2a] p-6 rounded-xl shadow-md mb-6">
                     <h2 className="text-xl font-semibold mb-4 text-gray-300">Account Balance Over Time</h2>
                     <Line data={chartData} />
                 </div>
 
+                {/* Date Selector Range */}
                 <div className="w-full bg-[#232323] p-2 rounded-lg mb-6">
                     <div className="flex justify-between">
                         {["5D", "1M", "3M", "6M", "YTD", "1Y", "MAX"].map((range) => (
@@ -91,6 +133,7 @@ const Portfolio = () => {
                     </div>
                 </div>
 
+                {/* Positions Table */}
                 <div className="w-full bg-[#2a2a2a] p-6 rounded-xl shadow-md">
                     <h2 className="text-xl font-semibold mb-4 text-gray-300">Positions</h2>
                     <table className="w-full text-left text-gray-300">
@@ -105,20 +148,23 @@ const Portfolio = () => {
                         </tr>
                         </thead>
                         <tbody>
-                        {[{ symbol: "AAPL", quantity: 10, avgPrice: 145, marketPrice: 150 }, { symbol: "TSLA", quantity: 5, avgPrice: 650, marketPrice: 680 }, { symbol: "AMZN", quantity: 3, avgPrice: 3200, marketPrice: 3300 }].map((stock) => {
-                            const totalValue = stock.quantity * stock.marketPrice;
-                            const profitLoss = (stock.marketPrice - stock.avgPrice) * stock.quantity;
-                            return (
-                                <tr key={stock.symbol} className="border-b border-gray-600 hover:bg-[#3a3a3a]">
-                                    <td className="p-4 font-semibold text-white">{stock.symbol}</td>
-                                    <td className="p-4">{stock.quantity}</td>
-                                    <td className="p-4">${stock.avgPrice.toFixed(2)}</td>
-                                    <td className="p-4">${stock.marketPrice.toFixed(2)}</td>
-                                    <td className="p-4 font-semibold">${totalValue.toLocaleString()}</td>
-                                    <td className={`p-4 font-semibold ${profitLoss >= 0 ? "text-green-400" : "text-red-400"}`}>${profitLoss.toFixed(2)}</td>
-                                </tr>
-                            );
-                        })}
+                            {stocks.map((stock) => {
+                                const totalValue = stock.quantity * (stock.marketPrice || stock.avgPrice);
+                                const profitLoss = ((stock.marketPrice || stock.avgPrice) - stock.avgPrice) * stock.quantity;
+
+                                return (
+                                    <tr key={stock.symbol} className="border-b border-gray-600 hover:bg-[#3a3a3a]">
+                                        <td className="p-4 font-semibold text-white">{stock.symbol}</td>
+                                        <td className="p-4">{stock.quantity}</td>
+                                        <td className="p-4">${stock.avgPrice.toFixed(2)}</td>
+                                        <td className="p-4">{stock.marketPrice ? `$${stock.marketPrice.toFixed(2)}` : "Loading..."}</td>
+                                        <td className="p-4 font-semibold">${totalValue.toFixed(2)}</td>
+                                        <td className={`p-4 font-semibold ${profitLoss >= 0 ? "text-green-400" : "text-red-400"}`}>
+                                            ${profitLoss.toFixed(2)}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                         </tbody>
                     </table>
                 </div>
