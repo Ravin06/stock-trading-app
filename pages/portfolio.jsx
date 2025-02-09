@@ -45,22 +45,27 @@ const Portfolio = () => {
         fetchMarketPrices();
     }, []);
 
-    // Sample data for different time ranges (for account balance over time)
+    // Calculate total stock value dynamically
+    const totalStockValue = stocks.reduce((acc, stock) => {
+        return acc + stock.quantity * (stock.marketPrice || stock.avgPrice);
+    }, 0);
+
+    // Sample data for different time ranges (for net worth of stock over time)
     const timeRangeData = {
-        "5D": { labels: ["Mon", "Tue", "Wed", "Thu", "Fri"], data: [20000, 21200, 22500, 23300, 24000] },
-        "1M": { labels: ["Week 1", "Week 2", "Week 3", "Week 4"], data: [24000, 24300, 24700, 25000] },
-        "3M": { labels: ["Jan", "Feb", "Mar"], data: [23000, 24500, 25000] },
-        "6M": { labels: ["Sep", "Oct", "Nov", "Dec", "Jan", "Feb"], data: [22000, 22500, 23000, 24000, 25000] },
-        "YTD": { labels: ["Jan", "Feb", "Mar", "Apr", "May"], data: [21000, 22000, 23000, 24000, 25000] },
-        "1Y": { labels: ["Feb", "Apr", "Jun", "Aug", "Oct", "Dec"], data: [20000, 21000, 22000, 23000, 24000, 25000] },
-        "MAX": { labels: ["2021", "2022", "2023", "2024", "2025"], data: [15000, 18000, 20000, 23000, 25000] }
+        "5D": { labels: ["5/2/25", "6/2/25", "7/2/25", "8/2/25", "9/2/25"], data: [2400, 3000, 3500, 3700, totalStockValue] },
+        "1M": { labels: ["10/1/25", "25/1/25", "9/2/25"], data: [1500, 1750, totalStockValue] },
+        "3M": { labels: ["10/11/24", "26/12/24", "9/2/25"], data: [800, 900, totalStockValue] },
+        "6M": { labels: ["10/8/24", "10/11/24", "9/2/25"], data: [400, 800, totalStockValue] },
+        "YTD": { labels: ["1/1/25", "21/1/25", "9/2/25"], data: [1900, 2200, totalStockValue] },
+        "1Y": { labels: ["10/2/24", "11/8/24", "9/2/25"], data: [50, 405, totalStockValue] },
+        "MAX": { labels: ["19/3/23", "29/2/24", "9/2/25"], data: [500, 200, totalStockValue] }
     };
 
     const chartData = {
         labels: timeRangeData[timeRange].labels,
         datasets: [
             {
-                label: "Account Balance",
+                label: "Net Worth of Stocks",
                 data: timeRangeData[timeRange].data,
                 borderColor: "#4CAF50",
                 backgroundColor: (context) => {
@@ -93,11 +98,6 @@ const Portfolio = () => {
     // Static cash balance (USD + SGD + HKD)
     const cashBalance = 5000 + 3000 + 2000;
 
-    // Calculate total stock value dynamically
-    const totalStockValue = stocks.reduce((acc, stock) => {
-        return acc + stock.quantity * (stock.marketPrice || stock.avgPrice);
-    }, 0);
-
     // Compute dynamic account balance
     const accountBalance = cashBalance + totalStockValue;
 
@@ -125,7 +125,7 @@ const Portfolio = () => {
             <div className="flex-1 flex flex-col">
                 {/* Main Chart */}
                 <div className="w-full bg-[#2a2a2a] p-6 rounded-xl shadow-md mb-6">
-                    <h2 className="text-xl font-semibold mb-4 text-gray-300">Account Balance Over Time</h2>
+                    <h2 className="text-xl font-semibold mb-4 text-gray-300">Portfolio Worth Over Time</h2>
                     <Line data={chartData} />
                 </div>
 
