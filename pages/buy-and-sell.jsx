@@ -79,29 +79,28 @@ const StockTradingPage = () => {
     timestamp: new Date().toLocaleString(),
   };
 
-  // Update BTC amount based on action (buy or sell)
-  if (action === 'buy') {
-    const newAmount = parseFloat((bitcoinAmount + quantity).toFixed(6)); // Add BTC to holdings
-    setBitcoinAmount(newAmount);
-    Cookies.set('bitcoinAmount', newAmount);  // Save the new BTC amount in the cookie
-  } else if (action === 'sell') {
-    const newAmount = parseFloat((bitcoinAmount - quantity).toFixed(6)); // Subtract BTC from holdings
-    setBitcoinAmount(newAmount);
-    Cookies.set('bitcoinAmount', newAmount);  // Save the new BTC amount in the cookie
-  }
+    // Update BTC amount based on action (buy or sell)
+    if (action === 'buy') {
+      const newAmount = parseFloat((bitcoinAmount + quantity).toFixed(6)); // Add BTC to holdings
+      setBitcoinAmount(newAmount);
+      Cookies.set('bitcoinAmount', newAmount);  // Save the new BTC amount in the cookie
+    } else if (action === 'sell') {
+      const newAmount = parseFloat((bitcoinAmount - quantity).toFixed(6)); // Subtract BTC from holdings
+      setBitcoinAmount(newAmount);
+      Cookies.set('bitcoinAmount', newAmount);  // Save the new BTC amount in the cookie
+    }
 
-  setTransactions([transaction, ...transactions]);
+    setTransactions([transaction, ...transactions]);
 
-  // Create the alert message
-  const newAlert = `${action === 'buy' ? 'Bought' : 'Sold'} ${quantity} BTC for $${totalValue.toFixed(2)}`;
-  setAlerts([newAlert, ...alerts]); // Add alert to the list
+    // Create the alert message
+    const newAlert = `${action === 'buy' ? 'Bought' : 'Sold'} ${quantity} BTC for $${totalValue.toFixed(2)}`;
+    setAlerts([newAlert, ...alerts]); // Add alert to the list
 
-  setQuantity(1);
+    setQuantity(1);
 
-  // Refresh the graph by fetching the updated data
-  fetchBitcoinData();  // Refresh graph data after the trade
-};
-
+    // Refresh the graph by fetching the updated data
+    fetchBitcoinData();  // Refresh graph data after the trade
+  };
 
   // Toggle between dark and light modes
   const toggleDarkMode = () => {
@@ -193,7 +192,7 @@ const StockTradingPage = () => {
             marginBottom: '15px',
             padding: '10px',
             borderRadius: '5px',
-            border: '1px solid red', // Red border
+            border: `1px solid ${action === 'buy' ? 'green' : 'red'}`, // Border color based on action
             width: '80%',
             color: '#ffffff', // White text
             backgroundColor: '#000000', // Black background
@@ -206,7 +205,7 @@ const StockTradingPage = () => {
             marginBottom: '15px',
             padding: '10px',
             borderRadius: '5px',
-            border: '1px solid red', // Red border
+            border: `1px solid ${action === 'buy' ? 'green' : 'red'}`, // Border color based on action
             width: '80%',
             color: '#ffffff', // White text
             backgroundColor: '#000000', // Black background
@@ -218,7 +217,7 @@ const StockTradingPage = () => {
         <button
           onClick={handleTrade}
           style={{
-            backgroundColor: action === 'buy' ? '#dc3545' : '#dc3545',  // Changed to red
+            backgroundColor: action === 'buy' ? '#28a745' : '#dc3545',  // Green for buy, Red for sell
             color: '#ffffff',
             padding: '10px',
             border: '1px solid red', // Red border
@@ -230,26 +229,25 @@ const StockTradingPage = () => {
         </button>
 
         {/* Alerts Section */}
-<div
-  style={{
-    marginTop: '20px',
-    padding: '10px',
-    backgroundColor: '#000000',  // Black background
-    color: '#ffffff',  // White text
-    borderRadius: '5px',
-    border: '1px solid red', // Red border
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  }}
->
-  {alerts.map((alert, index) => (
-    <div key={index} style={{ marginBottom: '10px' }}>
-      <strong>{alert}</strong>
-    </div>
-  ))}
-</div>
-
+        <div
+          style={{
+            marginTop: '20px',
+            padding: '10px',
+            backgroundColor: '#000000',  // Black background
+            color: '#ffffff',  // White text
+            borderRadius: '5px',
+            border: '1px solid red', // Red border
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          {alerts.map((alert, index) => (
+            <div key={index} style={{ marginBottom: '10px' }}>
+              <strong>{alert}</strong>
+            </div>
+          ))}
+        </div>
 
         {/* BTC Amount */}
         <div
@@ -273,4 +271,3 @@ const StockTradingPage = () => {
 };
 
 export default StockTradingPage;
-
