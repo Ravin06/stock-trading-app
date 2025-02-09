@@ -3,7 +3,7 @@ Student Name : Cedrick Tan Yi Quan
 Student Number: S10265863D
 */
 
-/* Global Styles */
+/* Global styles */
 body {
     background: linear-gradient(to bottom, black, red);
     margin: 0;
@@ -12,7 +12,7 @@ body {
     color: white;
 }
 
-/* navbar */
+/* Navbar */
 .navbar {
     width: 100%;
     height: 60px;
@@ -27,14 +27,14 @@ body {
     z-index: 1000;
 }
 
-/* navbar title */
+/* Navbar title */
 .navbar-title {
     font-size: 20px;
     font-weight: bold;
     color: white;
 }
 
-/* navbar links */
+/* Navbar links */
 .navbar-links {
     list-style: none;
     display: flex;
@@ -55,12 +55,12 @@ body {
     transition: color 0.3s;
 }
 
-/* hover effect */
+/* Hover effect */
 .navbar-links a:hover {
     color: #ffcccb;
 }
 
-/* logout button */
+/* Logout button */
 .logout {
     font-weight: bold;
     color: #ffcccb;
