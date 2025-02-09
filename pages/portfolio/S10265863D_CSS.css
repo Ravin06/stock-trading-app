@@ -12,7 +12,7 @@ body {
     color: white;
 }
 
-/* Navbar */
+/* S10265863D_Navbar */
 .navbar {
     width: 100%;
     height: 60px;
@@ -27,14 +27,14 @@ body {
     z-index: 1000;
 }
 
-/* Navbar title */
+/* S10265863D_Navbar title */
 .navbar-title {
     font-size: 20px;
     font-weight: bold;
     color: white;
 }
 
-/* Navbar links */
+/* S10265863D_Navbar links */
 .navbar-links {
     list-style: none;
     display: flex;
