@@ -5,7 +5,6 @@
 
 
 
-import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import Cookies from 'js-cookie';  // Import the js-cookie library
