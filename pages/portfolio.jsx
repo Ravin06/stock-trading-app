@@ -6,11 +6,13 @@ Student Number: S10265863D
 import React, { useState, useEffect } from "react";
 import { Line, Doughnut } from "react-chartjs-2";
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement, Filler } from "chart.js";
-import Navbar from "./portfolio/Components/navbar.jsx";
+import S10265863D_Navbar from "./S10265863D_Portfolio/Components/S10265863D_Navbar.jsx";
+import Cookies from 'js-cookie';
 
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement, Filler);
 
 const Portfolio = () => {
+
     const [timeRange, setTimeRange] = useState("6M");
 
     // Static stock data (except for marketPrice)
@@ -21,29 +23,6 @@ const Portfolio = () => {
     ];
 
     const [stocks, setStocks] = useState(initialStocks.map(stock => ({ ...stock, marketPrice: null })));
-
-    // Fetch market prices from Finnhub API
-    useEffect(() => {
-        const fetchMarketPrices = async () => {
-            try {
-                const updatedStocks = await Promise.all(
-                    initialStocks.map(async (stock) => {
-                        const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${stock.symbol}&token=cujqgbpr01qgs4826d3gcujqgbpr01qgs4826d40`);
-                        const data = await response.json();
-                        return {
-                            ...stock,
-                            marketPrice: data.c || stock.avgPrice, // 'c' is the current price in Finnhub's response
-                        };
-                    })
-                );
-                setStocks(updatedStocks);
-            } catch (error) {
-                console.error("Error fetching market prices:", error);
-            }
-        };
-
-        fetchMarketPrices();
-    }, []);
 
     // Calculate total stock value dynamically
     const totalStockValue = stocks.reduce((acc, stock) => {
@@ -95,78 +74,65 @@ const Portfolio = () => {
         ],
     };
 
-    const chartOptions = {
-        responsive: true,
-        plugins: {
-            tooltip: {
-                mode: "index",
-                intersect: false,
-            },
-            crosshair: {
-                sync: {
-                    enabled: false
-                },
-                line: {
-                    color: "#ffffff",
-                    width: 2,
-                    dashPattern: [],
-                    zIndex: 9999
-                },
-                zoom: {
-                    enabled: false
-                },
-                snap: {
-                    enabled: true
-                }
-            },
-            line: {
-                color: "#ffffff",
-                width: 1,
-                dashPattern: [5, 5],
-            },
-            zoom: {
-                enabled: false,
-            },
-            snap: {
-                enabled: true,
-            },
-        },
-        hover: {
-            mode: "index",
-            intersect: false,
-        },
-        };
-
+    // Static cash balance (USD + SGD + HKD)
     const [exchangeRates, setExchangeRates] = useState(null);
+
+    const convertToUSD = (amount, currency) => {
+        if (!exchangeRates || !exchangeRates[currency]) return amount;
+        return amount / exchangeRates[currency];
+    };
+
+    const cashBalance = convertToUSD(5000, "SGD") + convertToUSD(3000, "HKD") + 2000;
+
+    // Compute dynamic account balance
+    const accountBalance = cashBalance + totalStockValue;
+
+    // Fetch market prices from Finnhub API
+    useEffect(() => {
+        const fetchMarketPrices = async () => {
+            try {
+                const updatedStocks = await Promise.all(
+                    initialStocks.map(async (stock) => {
+                        const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${stock.symbol}&token=cujqgbpr01qgs4826d3gcujqgbpr01qgs4826d40`);
+                        const data = await response.json();
+                        return {
+                            ...stock,
+                            marketPrice: data.c || stock.avgPrice, // 'c' is the current price in Finnhub's response
+                        };
+                    })
+                );
+                setStocks(updatedStocks);
+            } catch (error) {
+                console.error("Error fetching market prices:", error);
+            }
+        };
+        fetchMarketPrices();
+    }, []);
 
     useEffect(() => {
         const fetchExchangeRates = async () => {
             try {
                 const response = await fetch("https://v6.exchangerate-api.com/v6/5b336d5b73e3d4960b111f9c/latest/USD");
                 const data = await response.json();
-                setExchangeRates(data.rates);
+                if (data.result === "success") {
+                    setExchangeRates(data.conversion_rates);
+                } else {
+                    console.error("Error fetching exchange rates:", data);
+                }
             } catch (error) {
                 console.error("Error fetching exchange rates:", error);
             }
         };
-
         fetchExchangeRates();
     }, []);
 
-    const convertToUSD = (amount, currency) => {
-        if (!exchangeRates) return amount; // If exchange rates aren't available, return the amount as-is.
-        return amount / exchangeRates[currency]; // Convert to USD
-    };
-
-    // Example usage:
-    const usdCash = convertToUSD(5000, "SGD") + convertToUSD(3000, "HKD") + 2000; // Assuming USD balance is 2000
-
-    // Compute dynamic account balance
-    const accountBalance = usdCash + totalStockValue;
+    Cookies.set('totalStockValue', totalStockValue, { expires: 7 });
+    Cookies.set('cashBalance', cashBalance, { expires: 7 });
+    Cookies.set('accountBalance', accountBalance, { expires: 7 });
 
     return (
         <div className="p-6 bg-[#1e1e1e] min-h-screen flex">
-            <Navbar />
+            <S10265863D_Navbar />
             {/* Left Side Panel (Account Info & Cash Balance) */}
             <div className="w-1/4 bg-[#232323] p-6 rounded-xl shadow-md mr-6 border border-[#3a3a3a] flex flex-col">
                 <h2 className="text-xl font-semibold mb-4 text-gray-300">Account Info</h2>
@@ -189,7 +155,7 @@ const Portfolio = () => {
                 {/* Main Chart */}
                 <div className="w-full bg-[#2a2a2a] p-6 rounded-xl shadow-md mb-6">
                     <h2 className="text-xl font-semibold mb-4 text-gray-300">Portfolio Worth Over Time</h2>
-                    <Line data={chartData} options={chartOptions}/>
+                    <Line data={chartData} />
                 </div>
 
                 {/* Date Selector Range */}
