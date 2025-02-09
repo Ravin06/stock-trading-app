@@ -95,11 +95,74 @@ const Portfolio = () => {
         ],
     };
 
-    // Static cash balance (USD + SGD + HKD)
-    const cashBalance = 5000 + 3000 + 2000;
+    const chartOptions = {
+        responsive: true,
+        plugins: {
+            tooltip: {
+                mode: "index",
+                intersect: false,
+            },
+            crosshair: {
+                sync: {
+                    enabled: false
+                },
+                line: {
+                    color: "#ffffff",
+                    width: 2,
+                    dashPattern: [],
+                    zIndex: 9999
+                },
+                zoom: {
+                    enabled: false
+                },
+                snap: {
+                    enabled: true
+                }
+            },
+            line: {
+                color: "#ffffff",
+                width: 1,
+                dashPattern: [5, 5],
+            },
+            zoom: {
+                enabled: false,
+            },
+            snap: {
+                enabled: true,
+            },
+        },
+        hover: {
+            mode: "index",
+            intersect: false,
+        },
+        };
+
+    const [exchangeRates, setExchangeRates] = useState(null);
+
+    useEffect(() => {
+        const fetchExchangeRates = async () => {
+            try {
+                const response = await fetch("https://v6.exchangerate-api.com/v6/5b336d5b73e3d4960b111f9c/latest/USD");
+                const data = await response.json();
+                setExchangeRates(data.rates);
+            } catch (error) {
+                console.error("Error fetching exchange rates:", error);
+            }
+        };
+
+        fetchExchangeRates();
+    }, []);
+
+    const convertToUSD = (amount, currency) => {
+        if (!exchangeRates) return amount; // If exchange rates aren't available, return the amount as-is.
+        return amount / exchangeRates[currency]; // Convert to USD
+    };
+
+    // Example usage:
+    const usdCash = convertToUSD(5000, "SGD") + convertToUSD(3000, "HKD") + 2000; // Assuming USD balance is 2000
 
     // Compute dynamic account balance
-    const accountBalance = cashBalance + totalStockValue;
+    const accountBalance = usdCash + totalStockValue;
 
     return (
         <div className="p-6 bg-[#1e1e1e] min-h-screen flex">
@@ -126,7 +189,7 @@ const Portfolio = () => {
                 {/* Main Chart */}
                 <div className="w-full bg-[#2a2a2a] p-6 rounded-xl shadow-md mb-6">
                     <h2 className="text-xl font-semibold mb-4 text-gray-300">Portfolio Worth Over Time</h2>
-                    <Line data={chartData} />
+                    <Line data={chartData} options={chartOptions}/>
                 </div>
 
                 {/* Date Selector Range */}
