@@ -87,6 +87,56 @@ const Portfolio = () => {
     // Compute dynamic account balance
     const accountBalance = cashBalance + totalStockValue;
 
+    const chartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            tooltip: {
+                mode: "index",
+                intersect: false,
+            },
+            legend: {
+                display: false,
+            },
+        },
+        hover: {
+            mode: "index",
+            intersect: false,
+        },
+        scales: {
+            x: {
+                grid: {
+                    color: "rgba(255, 255, 255, 0.1)", // Light grid lines
+                },
+            },
+            y: {
+                grid: {
+                    color: "rgba(255, 255, 255, 0.1)",
+                },
+            },
+        },
+        elements: {
+            point: {
+                radius: 5, // Highlight points on hover
+                hoverRadius: 7,
+            },
+        },
+        onHover: (event, elements, chart) => {
+            if (elements.length > 0) {
+                const ctx = chart.canvas.getContext("2d");
+                const x = elements[0].element.x;
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(x, chart.chartArea.top);
+                ctx.lineTo(x, chart.chartArea.bottom);
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = "#ffffff"; // White line
+                ctx.stroke();
+                ctx.restore();
+            }
+        },
+    };
+
     // Fetch market prices from Finnhub API
     useEffect(() => {
         const fetchMarketPrices = async () => {
@@ -153,9 +203,9 @@ const Portfolio = () => {
 
             <div className="flex-1 flex flex-col">
                 {/* Main Chart */}
-                <div className="w-full bg-[#2a2a2a] p-6 rounded-xl shadow-md mb-6">
+                <div className="w-full h-[500px] bg-[#2a2a2a] p-6 rounded-xl shadow-md mb-6">
                     <h2 className="text-xl font-semibold mb-4 text-gray-300">Portfolio Worth Over Time</h2>
-                    <Line data={chartData} />
+                    <Line data={chartData} options={chartOptions}/>
                 </div>
 
                 {/* Date Selector Range */}
@@ -174,7 +224,7 @@ const Portfolio = () => {
                 </div>
 
                 {/* Positions Table */}
-                <div className="w-full bg-[#2a2a2a] p-6 rounded-xl shadow-md">
+                <div className="w-full h-[330px] bg-[#2a2a2a] p-6 rounded-xl shadow-md">
                     <h2 className="text-xl font-semibold mb-4 text-gray-300">Positions</h2>
                     <table className="w-full text-left text-gray-300">
                         <thead>
