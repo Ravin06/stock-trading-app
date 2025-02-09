@@ -1,3 +1,23 @@
+# Stock Trading App in NextJs
+### Important details
+Login Credentials  
+Username: **user@example.com**  
+Password: **password**  
+### Screens
+Login [Done by [Ravin](https://github.com/Ravin06)]
+![image](https://github.com/user-attachments/assets/fc8c34ff-cef4-43e9-88a0-0e6b4ad92a95)
+
+Dashboard [Done by [Javen](https://github.com/nevajj)]
+![image](https://github.com/user-attachments/assets/530a6632-18f4-4dc8-9102-7a1d3cf6072e)
+
+Buying and Selling [Done by [Wynston](https://github.com/wyn-cmd)]
+![image](https://github.com/user-attachments/assets/31a15a05-2ce6-42db-beab-870d60b2822b)
+
+Profile [Done by [Cedrick](https://github.com/cecece-c)]
+![image](https://github.com/user-attachments/assets/620208c2-32b1-4d3b-935c-dbf0340ed9ff)
+
+
+# Running instructions
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
 
 ## Getting Started
