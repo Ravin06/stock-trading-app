@@ -8,7 +8,7 @@ Student Number: S10265863D
 import React from "react";
 
 // Import CSS.
-import "../S10265863D_CSS.css";
+import "./S10265863D_CSS.css";
 
 
 // S10265863D_Navbar component for navigation.
