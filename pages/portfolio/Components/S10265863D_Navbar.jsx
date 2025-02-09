@@ -11,8 +11,8 @@ import React from "react";
 import "../S10265863D_CSS.css";
 
 
-// Navbar component for navigation.
-const Navbar = () => {
+// S10265863D_Navbar component for navigation.
+const S10265863D_Navbar = () => {
     return (
         <nav className="navbar">
 
@@ -32,4 +32,4 @@ const Navbar = () => {
     );
 };
 
-export default Navbar;
+export default S10265863D_Navbar;
