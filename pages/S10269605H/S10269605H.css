@@ -115,7 +115,7 @@ body {
     flex-direction: column;
 }
 
-/* Navbar */
+/* Navbar Styling */
 .navbar {
     width: 100%;
     height: 60px;
@@ -128,6 +128,7 @@ body {
     top: 0;
     left: 0;
     z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Adding shadow for depth */
 }
 
 /* Navbar Title */
@@ -135,32 +136,38 @@ body {
     font-size: 20px;
     font-weight: bold;
     color: white;
+    text-transform: uppercase; /* Adding uppercase for a more professional look */
 }
 
 /* Navbar Links */
 .navbar-links {
     list-style: none;
     display: flex;
-    gap: 15px;
+    gap: 20px; /* Increased gap for better spacing */
     margin: 0;
     padding: 0;
 }
 
-    .navbar-links li {
-        display: inline;
-    }
-
-    .navbar-links a {
-        text-decoration: none;
-        color: white;
-        font-size: 14px;
-        font-weight: 500;
-        transition: color 0.3s;
-    }
+/* Link Styling */
+.navbar-link {
+    text-decoration: none;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.3s, padding 0.3s ease-in-out;
+}
 
 /* Hover Effect */
-.navbar-links a:hover {
+.navbar-link:hover {
     color: #ffcccb;
+}
+
+/* Active Link Indicator */
+.navbar-link.active {
+    color: #ffcccb; /* Highlight active link */
+    padding-bottom: 5px; /* Add space below active link */
+    border-bottom: 2px solid #ffcccb; /* Add underline effect for active state */
 }
 
 /* Logout Button */
@@ -168,6 +175,22 @@ body {
     font-weight: bold;
     color: #ffcccb;
 }
+
+/* Added responsiveness for smaller screens */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0 10px; /* Adjust navbar padding on smaller screens */
+    }
+
+    .navbar-links {
+        gap: 15px; /* Slightly reduced gap */
+    }
+
+    .navbar-title {
+        font-size: 18px;
+    }
+}
+
 
 /* Details Section */
 .details-list {

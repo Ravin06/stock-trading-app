@@ -21,12 +21,12 @@ const S10265863D_Navbar = () => {
 
             {/* Navigation links */}
             <ul className="navbar-links">
-                <li><a href="/S10269605">Dashboard</a></li>
-                <li><a href="/buy-and-sell">Buy/Sell</a></li>
-                <li><a href="/portfolio">Profile</a></li>
+                <li><a href="/S10269605" className="navbar-link">Dashboard</a></li>
+                <li><a href="/buy-and-sell" className="navbar-link">Buy/Sell</a></li>
+                <li><a href="/portfolio" className="navbar-link">Profile</a></li>
 
                 {/* Logout button with a different style */}
-                <li><a href="/" className="logout">Logout</a></li>
+                <li><a href="/" className="navbar-link logout">Logout</a></li>
             </ul>
         </nav>
     );

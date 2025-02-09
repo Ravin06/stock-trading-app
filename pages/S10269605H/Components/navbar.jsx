@@ -7,7 +7,6 @@
 import React from "react";
 import "../S10269605H.css"; // Import centralized CSS
 
-
 // Navbar component for navigation
 const Navbar = () => {
     return (
@@ -17,11 +16,11 @@ const Navbar = () => {
 
             {/* navigation links */}
             <ul className="navbar-links">
-                <li><a href="/S10269605">Dashboard</a></li>
-                <li><a href="/buy-and-sell">Buy/Sell</a></li>
-                <li><a href="/portfolio">Profile</a></li>
+                <li><a href="/S10269605" className="navbar-link">Dashboard</a></li>
+                <li><a href="/buy-and-sell" className="navbar-link">Buy/Sell</a></li>
+                <li><a href="/portfolio" className="navbar-link">Profile</a></li>
                 {/* logout button with a different style */}
-                <li><a href="/" className="logout">Logout</a></li>
+                <li><a href="/" className="navbar-link logout">Logout</a></li>
             </ul>
         </nav>
     );

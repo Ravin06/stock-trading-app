@@ -12,11 +12,12 @@ body {
     color: white;
 }
 
-/* S10265863D_Navbar */
+
+/* Navbar Styling */
 .navbar {
     width: 100%;
     height: 60px;
-    background-color: black;
+    background-color: #1a1a1a;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -25,43 +26,66 @@ body {
     top: 0;
     left: 0;
     z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Adding shadow for depth */
 }
 
-/* S10265863D_Navbar title */
+/* Navbar Title */
 .navbar-title {
     font-size: 20px;
     font-weight: bold;
     color: white;
+    text-transform: uppercase; /* Adding uppercase for a more professional look */
 }
 
-/* S10265863D_Navbar links */
+/* Navbar Links */
 .navbar-links {
     list-style: none;
     display: flex;
-    gap: 15px;
+    gap: 20px; /* Increased gap for better spacing */
     margin: 0;
     padding: 0;
 }
 
-.navbar-links li {
-    display: inline;
-}
-
-.navbar-links a {
+/* Link Styling */
+.navbar-link {
     text-decoration: none;
     color: white;
     font-size: 14px;
     font-weight: 500;
-    transition: color 0.3s;
+    position: relative;
+    transition: color 0.3s, padding 0.3s ease-in-out;
 }
 
-/* Hover effect */
-.navbar-links a:hover {
+/* Hover Effect */
+.navbar-link:hover {
     color: #ffcccb;
 }
 
-/* Logout button */
+/* Active Link Indicator */
+.navbar-link.active {
+    color: #ffcccb; /* Highlight active link */
+    padding-bottom: 5px; /* Add space below active link */
+    border-bottom: 2px solid #ffcccb; /* Add underline effect for active state */
+}
+
+/* Logout Button */
 .logout {
     font-weight: bold;
     color: #ffcccb;
 }
+
+/* Added responsiveness for smaller screens */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0 10px; /* Adjust navbar padding on smaller screens */
+    }
+
+    .navbar-links {
+        gap: 15px; /* Slightly reduced gap */
+    }
+
+    .navbar-title {
+        font-size: 18px;
+    }
+}
+
