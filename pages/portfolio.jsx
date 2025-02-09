@@ -3,33 +3,37 @@ Student Name: Cedrick Tan Yi Quan
 Student Number: S10265863D
 */
 
+// Imports
 import React, { useState, useEffect } from "react";
 import { Line, Doughnut } from "react-chartjs-2";
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement, Filler } from "chart.js";
-import S10265863D_Navbar from "./S10265863D_Portfolio/Components/S10265863D_Navbar.jsx";
+import S10265863D_Navbar from "./S10265863D_Portfolio/Components/S10265863D_Navbar.jsx"; // Import Navbar.
 import Cookies from 'js-cookie';
 
+// Register necessary chart.js components.
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, ArcElement, Filler);
 
 const Portfolio = () => {
 
-    const [timeRange, setTimeRange] = useState("6M");
+    // Set default time range to display.
+    const [timeRange, setTimeRange] = useState("5D");
 
-    // Static stock data (except for marketPrice)
+    // Initial static stock data (except for marketPrice which is fetched dynamically).
     const initialStocks = [
         { symbol: "AAPL", quantity: 10, avgPrice: 145 },
         { symbol: "TSLA", quantity: 5, avgPrice: 300 },
         { symbol: "AMZN", quantity: 3, avgPrice: 200 },
     ];
 
+    // State to store stocks with dynamically updated market prices.
     const [stocks, setStocks] = useState(initialStocks.map(stock => ({ ...stock, marketPrice: null })));
 
-    // Calculate total stock value dynamically
+    // Calculate the total stock value based on quantity and market price (or avgPrice if marketPrice is unavailable).
     const totalStockValue = stocks.reduce((acc, stock) => {
         return acc + stock.quantity * (stock.marketPrice || stock.avgPrice);
     }, 0);
 
-    // Sample data for different time ranges (for net worth of stock over time)
+    // Sample data for different time ranges (for net worth of stock over time).
     const timeRangeData = {
         "5D": { labels: ["5/2/25", "6/2/25", "7/2/25", "8/2/25", "9/2/25"], data: [2400, 3000, 3500, 3700, totalStockValue] },
         "1M": { labels: ["10/1/25", "25/1/25", "9/2/25"], data: [1500, 1750, totalStockValue] },
@@ -40,6 +44,7 @@ const Portfolio = () => {
         "MAX": { labels: ["19/3/23", "29/2/24", "9/2/25"], data: [500, 200, totalStockValue] }
     };
 
+    // Line chart configuration for portfolio net worth over time.
     const chartData = {
         labels: timeRangeData[timeRange].labels,
         datasets: [
@@ -63,6 +68,7 @@ const Portfolio = () => {
         ],
     };
 
+    // Pie chart configuration for cash balance distribution.
     const cashData = {
         labels: ["USD Cash", "SGD Cash", "HKD Cash"],
         datasets: [
@@ -74,19 +80,22 @@ const Portfolio = () => {
         ],
     };
 
-    // Static cash balance (USD + SGD + HKD)
+    // State to store exchange rates for currency conversion.
     const [exchangeRates, setExchangeRates] = useState(null);
 
+    // Helper function to convert cash to USD using exchange rates.
     const convertToUSD = (amount, currency) => {
         if (!exchangeRates || !exchangeRates[currency]) return amount;
         return amount / exchangeRates[currency];
     };
 
+    // Compute total cash balance in USD.
     const cashBalance = convertToUSD(5000, "SGD") + convertToUSD(3000, "HKD") + 2000;
 
-    // Compute dynamic account balance
+    // Compute overall account balance (cash + stocks).
     const accountBalance = cashBalance + totalStockValue;
 
+    // Settings for chart line which follows cursor.
     const chartOptions = {
         responsive: true,
         maintainAspectRatio: false,
@@ -137,7 +146,8 @@ const Portfolio = () => {
         },
     };
 
-    // Fetch market prices from Finnhub API
+    // Fetch market prices from Finnhub API and update stock prices.
+    // API Key: cujqgbpr01qgs4826d3gcujqgbpr01qgs4826d40
     useEffect(() => {
         const fetchMarketPrices = async () => {
             try {
@@ -159,6 +169,8 @@ const Portfolio = () => {
         fetchMarketPrices();
     }, []);
 
+    // Fetch exchange rates from API and update state.
+    // API Key: 5b336d5b73e3d4960b111f9c
     useEffect(() => {
         const fetchExchangeRates = async () => {
             try {
@@ -176,6 +188,7 @@ const Portfolio = () => {
         fetchExchangeRates();
     }, []);
 
+    // Store key values in cookies for persistence.
     Cookies.set('totalStockValue', totalStockValue, { expires: 7 });
     Cookies.set('cashBalance', cashBalance, { expires: 7 });
     Cookies.set('accountBalance', accountBalance, { expires: 7 });
@@ -183,7 +196,7 @@ const Portfolio = () => {
     return (
         <div className="p-6 bg-[#1e1e1e] min-h-screen flex">
             <S10265863D_Navbar />
-            {/* Left Side Panel (Account Info & Cash Balance) */}
+            {/* UI components */}
             <div className="w-1/4 bg-[#232323] p-6 rounded-xl shadow-md mr-6 border border-[#3a3a3a] flex flex-col">
                 <h2 className="text-xl font-semibold mb-4 text-gray-300">Account Info</h2>
                 <div className="border-b border-[#3a3a3a] pb-4 mb-4">
@@ -202,6 +215,7 @@ const Portfolio = () => {
             </div>
 
             <div className="flex-1 flex flex-col">
+
                 {/* Main Chart */}
                 <div className="w-full h-[500px] bg-[#2a2a2a] p-6 rounded-xl shadow-md mb-6">
                     <h2 className="text-xl font-semibold mb-4 text-gray-300">Portfolio Worth Over Time</h2>
