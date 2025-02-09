@@ -1,0 +1,67 @@
+/*
+Student Name : Cedrick Tan Yi Quan
+Student Number: S10265863D
+*/
+
+/* Global Styles */
+body {
+    background: linear-gradient(to bottom, black, red);
+    margin: 0;
+    padding-top: 60px;
+    font-family: 'Quicksand', sans-serif;
+    color: white;
+}
+
+/* navbar */
+.navbar {
+    width: 100%;
+    height: 60px;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+/* navbar title */
+.navbar-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+/* navbar links */
+.navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-links li {
+    display: inline;
+}
+
+.navbar-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+/* hover effect */
+.navbar-links a:hover {
+    color: #ffcccb;
+}
+
+/* logout button */
+.logout {
+    font-weight: bold;
+    color: #ffcccb;
+}
